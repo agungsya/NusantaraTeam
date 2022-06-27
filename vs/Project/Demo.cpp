@@ -212,7 +212,7 @@ int main(int argc, char** argv) {
 	Setting* setting = new Setting();
 	setting->windowTitle = "Project Example";
 	setting->screenWidth = 1024;
-	setting->screenHeight = 768;
+	setting->screenHeight = 600;
 	setting->windowFlag = WindowFlag::WINDOWED;
 	Game* game = new Demo(setting);
 	game->Run();
