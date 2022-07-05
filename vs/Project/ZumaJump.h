@@ -37,12 +37,20 @@ namespace Engine {
 		Sprite* charSprite = NULL;
 		float yspeed = 0;
 		float xspeed = 0;
-		float gravity = 0.1;
+		float gravity = 0.06;
 
 		Texture* forestTexture = NULL;
 		Sprite* forestSprite = NULL;
+		Texture* obstacleTexture = NULL;
+		Sprite* obstacleSprite = NULL;
+
 		Texture* treeTexture = NULL;
 		Sprite* treeSprite = NULL;
+
+		bool collidedLeft = false;
+		bool treeCollidedLeft = false;
+
+		float counter = 0;
 	};
 }
 #endif

@@ -22,13 +22,23 @@ void ZumaJump::Init()
 	forestSprite->SetNumXFrames(1);
 	forestSprite->SetNumYFrames(1);
 
-	treeTexture = new Texture("forest_hill.png");
+	obstacleTexture = new Texture("plant.png");
+	obstacleSprite = new Sprite(obstacleTexture, defaultSpriteShader, defaultQuad);
+	obstacleSprite->SetPosition(1030, 100);
+	obstacleSprite->SetScale(0.2);
+	obstacleSprite->SetNumXFrames(31);
+	obstacleSprite->SetNumYFrames(1);
+	obstacleSprite->AddAnimation("obstacle-move", 0, 30);
+	obstacleSprite->PlayAnim("obstacle-move");
+	obstacleSprite->SetAnimationDuration(150);
+
+	treeTexture = new Texture("tree.png");
 	treeSprite = new Sprite(treeTexture, defaultSpriteShader, defaultQuad);
-	treeSprite->SetPosition(0, 0);
-	treeSprite->SetScale(0.6);
+	treeSprite->SetPosition(1030, 90);
+	treeSprite->SetScale(2.0);
 	treeSprite->SetNumXFrames(1);
-	treeSprite->SetNumYFrames(2);
-	treeSprite->AddAnimation("tree-move", 0, 1);
+	treeSprite->SetNumYFrames(1);
+	treeSprite->AddAnimation("tree-move", 0, 0);
 	treeSprite->PlayAnim("tree-move");
 	treeSprite->SetAnimationDuration(100);
 
@@ -56,8 +66,16 @@ void ZumaJump::Init()
 void ZumaJump::Update()
 {	
 
-	// Move player sprite using keyboard
 	vec2 playerPos = charSprite->GetPosition();
+	
+	float obstacleSpritex = obstacleSprite->GetPosition().x;
+	float obstacleSpritey = obstacleSprite->GetPosition().y;
+
+	float charSpritex = charSprite->GetPosition().x;
+	float charSpritey = charSprite->GetPosition().y;
+
+	float treeSpritex =treeSprite->GetPosition().x;
+	float treeSpritey =treeSprite->GetPosition().y;
 
 	// Set ground position
 	float static groundPos = playerPos.y;
@@ -67,24 +85,60 @@ void ZumaJump::Update()
 		return;
 	}
 	charSprite->PlayAnim("run");
-	treeSprite->PlayAnim("tree-move");
+	obstacleSprite->PlayAnim("obstacle-move");
 	if (inputManager->IsKeyPressed("Move Up")) {
 		yspeed = 200.0f;
-		/*charSprite->SetPosition(charSprite->GetPosition().x + xspeed * GetGameTime(),
-			charSprite->GetPosition().y + yspeed * GetGameTime());
-		charSprite->PlayAnim("idle");
-		if (charSprite->GetPosition().x == charSprite->GetPosition().x + xspeed * GetGameTime() && charSprite->GetPosition().y == charSprite->GetPosition().y + yspeed * GetGameTime()) {
-			charSprite->SetPosition(0, 0);
-		}*/
 		bool flip = charSprite->GetFlipHorizontal();
 
 		charSprite->SetPosition(playerPos.x,
 			playerPos.y + yspeed + gravity * GetGameTime());
+	
+		
 	}
 
+	if (collidedLeft == false) {
+		float velocity = -0.5f;
+
+		obstacleSpritex += velocity * GetGameTime();
+
+
+		obstacleSprite->SetPosition(obstacleSpritex, obstacleSpritey);
+
+
+		if (obstacleSpritex <= -200) {
+			collidedLeft = true;
+		}
+	}
+	else {
+		
+		obstacleSprite->SetPosition(1030, 100);
+		obstacleSprite->PlayAnim("obstacle-move");
+		collidedLeft = false;
+	}
+	
+	if (treeCollidedLeft == false) {
+		float velocity = -0.2f;
+
+		treeSpritex += velocity * GetGameTime();
+
+
+		treeSprite->SetPosition(treeSpritex, treeSpritey);
+
+
+		if (treeSpritex <= -400) {
+			treeCollidedLeft = true;
+		}
+	}
+	else {
+
+		treeSprite->SetPosition(1030, 90);
+		treeSprite->PlayAnim("tree-move");
+		treeCollidedLeft = false;
+	}
 
 	charSprite->Update(GetGameTime());
 	forestSprite->Update(GetGameTime());
+	obstacleSprite->Update(GetGameTime());
 	treeSprite->Update(GetGameTime());
 
 	// Move player to right side after moving out the left screen
@@ -101,16 +155,24 @@ void ZumaJump::Update()
 
 	// Set Player back to ground after jumping
 	if (playerPos.y > groundPos) {
-		SDL_Delay(100);
-		playerPos.y = groundPos;
-		charSprite->SetPosition(playerPos.x,
-			playerPos.y);
+		if (counter >= 500) {
+			playerPos.y = groundPos;
+			charSprite->SetPosition(playerPos.x,
+				playerPos.y);
+			counter = 0;
+		}
+		else {
+			counter++;
+			charSprite->SetPosition(playerPos.x,
+				playerPos.y);
+		}
 	}
 }
 
 void ZumaJump::Render()
 {
 	treeSprite->Draw();
+	obstacleSprite->Draw();
 	forestSprite->Draw();
 	
 	charSprite->Draw();
