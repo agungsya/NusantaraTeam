@@ -208,16 +208,16 @@ void Demo::Render()
 }
 
 
-int main(int argc, char** argv) {
-	Setting* setting = new Setting();
-	setting->windowTitle = "Project Example";
-	setting->screenWidth = 1024;
-	setting->screenHeight = 600;
-	setting->windowFlag = WindowFlag::WINDOWED;
-	Game* game = new Demo(setting);
-	game->Run();
-	delete setting;
-	delete game;
-
-	return 0;
-}
+//int main(int argc, char** argv) {
+//	Setting* setting = new Setting();
+//	setting->windowTitle = "Project Example";
+//	setting->screenWidth = 1024;
+//	setting->screenHeight = 600;
+//	setting->windowFlag = WindowFlag::WINDOWED;
+//	Game* game = new Demo(setting);
+//	game->Run();
+//	delete setting;
+//	delete game;
+//
+//	return 0;
+//}

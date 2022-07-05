@@ -40,6 +40,7 @@ namespace Engine {
 		void SetSize(float width, float height);
 		float GetScaleWidth();
 		float GetScaleHeight();
+		bool GetFlipHorizontal();
 		BoundingBox* GetBoundingBox();
 		vec2 GetPosition();
 		vec2 GetRotatedPoint(float x, float y);

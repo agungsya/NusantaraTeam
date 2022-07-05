@@ -72,6 +72,11 @@ void Engine::Sprite::SetFlipHorizontal(bool flipHorizontal)
 	this->flipHorizontal = flipHorizontal;
 }
 
+bool Engine::Sprite::GetFlipHorizontal()
+{
+	return this->flipHorizontal;
+}
+
 void Engine::Sprite::SetFlipVertical(bool flipVertical)
 {
 	this->flipVertical = flipVertical;
