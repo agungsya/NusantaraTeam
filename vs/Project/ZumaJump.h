@@ -38,6 +38,11 @@ namespace Engine {
 		float yspeed = 0;
 		float xspeed = 0;
 		float gravity = 0.1;
+
+		Texture* forestTexture = NULL;
+		Sprite* forestSprite = NULL;
+		Texture* treeTexture = NULL;
+		Sprite* treeSprite = NULL;
 	};
 }
 #endif

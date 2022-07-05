@@ -15,13 +15,28 @@ ZumaJump::~ZumaJump()
 
 void ZumaJump::Init()
 {
+	forestTexture = new Texture("forest_ground.png");
+	forestSprite = new Sprite(forestTexture, defaultSpriteShader, defaultQuad);
+	forestSprite->SetPosition(0, 0);
+	forestSprite->SetScale(0.7);
+	forestSprite->SetNumXFrames(1);
+	forestSprite->SetNumYFrames(1);
+
+	treeTexture = new Texture("forest_hill.png");
+	treeSprite = new Sprite(treeTexture, defaultSpriteShader, defaultQuad);
+	treeSprite->SetPosition(0, 0);
+	treeSprite->SetScale(0.6);
+	treeSprite->SetNumXFrames(1);
+	treeSprite->SetNumYFrames(2);
+	treeSprite->AddAnimation("tree-move", 0, 1);
+	treeSprite->PlayAnim("tree-move");
+	treeSprite->SetAnimationDuration(100);
+
 	charTexture = new Texture("frog.png");
 	charSprite = new Sprite(charTexture, defaultSpriteShader, defaultQuad);
-	charSprite->SetPosition((setting->screenWidth * 0.5f) - (charSprite->GetScaleWidth() * 0.5f),
-		(setting->screenHeight * 0.5f) - (charSprite->GetScaleHeight() * 0.5f));
-	charSprite->SetPosition(0, 0);
-	//charSprite->SetRotation(0);
-	charSprite->SetScale(10);
+	charSprite->SetPosition(20, 100);
+	
+	charSprite->SetScale(7);
 	charSprite->SetFlipVertical(false);
 
 	charSprite->SetNumXFrames(11);
@@ -31,10 +46,11 @@ void ZumaJump::Init()
 	charSprite->PlayAnim("run");
 	charSprite->SetAnimationDuration(150);
 
+	charSprite->SetBoundingBoxSize(charSprite->GetScaleWidth() - (16 * charSprite->GetScale()),
+		charSprite->GetScaleHeight() - (4 * charSprite->GetScale()));
+
 	inputManager->AddInputMapping("Move Up", SDLK_w);
-
-	SetBackgroundColor(23, 23, 23);
-
+	inputManager->AddInputMapping("Quit", SDLK_ESCAPE);
 }
 
 void ZumaJump::Update()
@@ -46,8 +62,12 @@ void ZumaJump::Update()
 	// Set ground position
 	float static groundPos = playerPos.y;
 
-
+	if (inputManager->IsKeyReleased("Quit")) {
+		state = State::EXIT;
+		return;
+	}
 	charSprite->PlayAnim("run");
+	treeSprite->PlayAnim("tree-move");
 	if (inputManager->IsKeyPressed("Move Up")) {
 		yspeed = 200.0f;
 		/*charSprite->SetPosition(charSprite->GetPosition().x + xspeed * GetGameTime(),
@@ -64,6 +84,8 @@ void ZumaJump::Update()
 
 
 	charSprite->Update(GetGameTime());
+	forestSprite->Update(GetGameTime());
+	treeSprite->Update(GetGameTime());
 
 	// Move player to right side after moving out the left screen
 	if (playerPos.x < 0) {
@@ -88,6 +110,9 @@ void ZumaJump::Update()
 
 void ZumaJump::Render()
 {
+	treeSprite->Draw();
+	forestSprite->Draw();
+	
 	charSprite->Draw();
 }
 
