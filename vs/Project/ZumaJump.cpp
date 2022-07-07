@@ -15,6 +15,8 @@ ZumaJump::~ZumaJump()
 
 void ZumaJump::Init()
 {
+
+	//Set button
 	buttonTexture = new Texture("button.png");
 	playSprite = new Sprite(buttonTexture, defaultSpriteShader, defaultQuad);
 	playSprite->SetNumXFrames(4);
@@ -23,10 +25,9 @@ void ZumaJump::Init()
 	playSprite->AddAnimation("play-hover", 2, 3);
 	playSprite->AddAnimation("play-press", 2, 3);
 	playSprite->PlayAnim("play-hover");
-	playSprite->SetPosition(((setting->screenWidth / 2) - (playSprite->GetPosition().x)), 400);
-	//playSprite->SetPosition(300, 400);
-	playSprite->SetScale(0.5);
-	playSprite->SetAnimationDuration(200);
+	playSprite->SetPosition(((setting->screenWidth / 2) - 100), 300);
+	playSprite->SetScale(0.3);
+	playSprite->SetAnimationDuration(500);
 
 	exitSprite = new Sprite(buttonTexture, defaultSpriteShader, defaultQuad);
 	exitSprite->SetNumXFrames(4);
@@ -35,10 +36,9 @@ void ZumaJump::Init()
 	exitSprite->AddAnimation("exit-hover", 0, 1);
 	exitSprite->AddAnimation("exit-press", 0, 1);
 	exitSprite->PlayAnim("exit-normal");
-	exitSprite->SetPosition(((setting->screenWidth / 2) - (exitSprite->GetPosition().x)), 200);
-	//exitSprite->SetPosition(300,250);
-	exitSprite->SetScale(0.5);
-	exitSprite->SetAnimationDuration(200);
+	exitSprite->SetPosition(((setting->screenWidth / 2) - 100), 200);
+	exitSprite->SetScale(0.3);
+	exitSprite->SetAnimationDuration(500);
 
 	forestTexture = new Texture("forest_ground.png");
 	forestSprite = new Sprite(forestTexture, defaultSpriteShader, defaultQuad);
@@ -123,11 +123,7 @@ void ZumaJump::Update()
 
 		charSprite->SetPosition(playerPos.x,
 			playerPos.y + yspeed + gravity * GetGameTime());
-	
-		
 	}
-
-	
 
 	if (inputManager->IsKeyReleased("Menu Move Up")) {
 		playSprite->PlayAnim("play-hover");
@@ -162,9 +158,7 @@ void ZumaJump::Update()
 
 		obstacleSpritex += velocity * GetGameTime();
 
-
 		obstacleSprite->SetPosition(obstacleSpritex, obstacleSpritey);
-
 
 		if (obstacleSpritex <= -200) {
 			collidedLeft = true;
@@ -182,9 +176,7 @@ void ZumaJump::Update()
 
 		treeSpritex += velocity * GetGameTime();
 
-
 		treeSprite->SetPosition(treeSpritex, treeSpritey);
-
 
 		if (treeSpritex <= -400) {
 			treeCollidedLeft = true;
@@ -234,7 +226,6 @@ void ZumaJump::Update()
 
 void ZumaJump::Render()
 {
-	
 	if (inGame) {
 		treeSprite->Draw();
 		obstacleSprite->Draw();
@@ -244,11 +235,8 @@ void ZumaJump::Render()
 	else {
 		exitSprite->Draw();
 		playSprite->Draw();
-	}
-
-	
+	}	
 }
-
 
 int main(int argc, char** argv) {
 	Setting* setting = new Setting();
