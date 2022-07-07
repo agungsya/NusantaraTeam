@@ -53,6 +53,7 @@ namespace Engine {
 
 		bool collidedLeft = false;
 		bool treeCollidedLeft = false;
+		bool inGame = false;
 
 		float counter = 0;
 	};

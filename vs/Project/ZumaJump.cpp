@@ -123,6 +123,10 @@ void ZumaJump::Update()
 		
 	}
 
+	if (inputManager->IsKeyReleased("enter")) {
+		inGame = true;
+	}
+
 	if (collidedLeft == false) {
 		float velocity = -0.5f;
 
@@ -200,13 +204,19 @@ void ZumaJump::Update()
 
 void ZumaJump::Render()
 {
-	//treeSprite->Draw();
-	//obstacleSprite->Draw();
-	//forestSprite->Draw();
-	//
-	//charSprite->Draw();
-	exitSprite->Draw();
-	playSprite->Draw();
+	
+	if (inGame) {
+		treeSprite->Draw();
+		obstacleSprite->Draw();
+		forestSprite->Draw();
+		charSprite->Draw();
+	}
+	else {
+		exitSprite->Draw();
+		playSprite->Draw();
+	}
+
+	
 }
 
 
