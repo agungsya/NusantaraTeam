@@ -54,6 +54,8 @@ namespace Engine {
 		bool collidedLeft = false;
 		bool treeCollidedLeft = false;
 		bool inGame = false;
+		bool playButtonIsSelected = false;
+		bool exitButtonIsSelected = false;
 
 		float counter = 0;
 	};
