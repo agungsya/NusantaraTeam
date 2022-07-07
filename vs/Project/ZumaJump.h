@@ -47,6 +47,10 @@ namespace Engine {
 		Texture* treeTexture = NULL;
 		Sprite* treeSprite = NULL;
 
+		Texture* buttonTexture = NULL;
+		Sprite* playSprite = NULL;
+		Sprite* exitSprite = NULL;
+
 		bool collidedLeft = false;
 		bool treeCollidedLeft = false;
 

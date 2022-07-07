@@ -15,6 +15,31 @@ ZumaJump::~ZumaJump()
 
 void ZumaJump::Init()
 {
+	buttonTexture = new Texture("button.png");
+	playSprite = new Sprite(buttonTexture, defaultSpriteShader, defaultQuad);
+	playSprite->SetNumXFrames(4);
+	playSprite->SetNumYFrames(1);
+	playSprite->AddAnimation("play-normal", 2, 2);
+	playSprite->AddAnimation("play-hover", 2, 3);
+	playSprite->AddAnimation("play-press", 2, 3);
+	playSprite->PlayAnim("play-hover");
+	playSprite->SetPosition(((setting->screenWidth / 2) - (playSprite->GetPosition().x)), 400);
+	//playSprite->SetPosition(300, 400);
+	playSprite->SetScale(0.5);
+	playSprite->SetAnimationDuration(200);
+
+	exitSprite = new Sprite(buttonTexture, defaultSpriteShader, defaultQuad);
+	exitSprite->SetNumXFrames(4);
+	exitSprite->SetNumYFrames(1);
+	exitSprite->AddAnimation("exit-normal", 0, 0);
+	exitSprite->AddAnimation("exit-hover", 0, 1);
+	exitSprite->AddAnimation("exit-press", 0, 1);
+	exitSprite->PlayAnim("exit-normal");
+	exitSprite->SetPosition(((setting->screenWidth / 2) - (exitSprite->GetPosition().x)), 200);
+	//exitSprite->SetPosition(300,250);
+	exitSprite->SetScale(0.5);
+	exitSprite->SetAnimationDuration(200);
+
 	forestTexture = new Texture("forest_ground.png");
 	forestSprite = new Sprite(forestTexture, defaultSpriteShader, defaultQuad);
 	forestSprite->SetPosition(0, 0);
@@ -25,7 +50,7 @@ void ZumaJump::Init()
 	obstacleTexture = new Texture("plant.png");
 	obstacleSprite = new Sprite(obstacleTexture, defaultSpriteShader, defaultQuad);
 	obstacleSprite->SetPosition(1030, 100);
-	obstacleSprite->SetScale(0.2);
+	obstacleSprite->SetScale(0.25);
 	obstacleSprite->SetNumXFrames(31);
 	obstacleSprite->SetNumYFrames(1);
 	obstacleSprite->AddAnimation("obstacle-move", 0, 30);
@@ -60,7 +85,9 @@ void ZumaJump::Init()
 		charSprite->GetScaleHeight() - (4 * charSprite->GetScale()));
 
 	inputManager->AddInputMapping("Move Up", SDLK_w);
+	inputManager->AddInputMapping("Move Down", SDLK_s);
 	inputManager->AddInputMapping("Quit", SDLK_ESCAPE);
+	inputManager->AddInputMapping("enter", SDLK_RETURN);
 }
 
 void ZumaJump::Update()
@@ -86,7 +113,7 @@ void ZumaJump::Update()
 	}
 	charSprite->PlayAnim("run");
 	obstacleSprite->PlayAnim("obstacle-move");
-	if (inputManager->IsKeyPressed("Move Up")) {
+	if (inputManager->IsKeyReleased("Move Up")) {
 		yspeed = 200.0f;
 		bool flip = charSprite->GetFlipHorizontal();
 
@@ -140,6 +167,8 @@ void ZumaJump::Update()
 	forestSprite->Update(GetGameTime());
 	obstacleSprite->Update(GetGameTime());
 	treeSprite->Update(GetGameTime());
+	playSprite->Update(GetGameTime());
+	exitSprite->Update(GetGameTime());
 
 	// Move player to right side after moving out the left screen
 	if (playerPos.x < 0) {
@@ -155,7 +184,7 @@ void ZumaJump::Update()
 
 	// Set Player back to ground after jumping
 	if (playerPos.y > groundPos) {
-		if (counter >= 500) {
+		if (counter >= 200) {
 			playerPos.y = groundPos;
 			charSprite->SetPosition(playerPos.x,
 				playerPos.y);
@@ -171,11 +200,13 @@ void ZumaJump::Update()
 
 void ZumaJump::Render()
 {
-	treeSprite->Draw();
-	obstacleSprite->Draw();
-	forestSprite->Draw();
-	
-	charSprite->Draw();
+	//treeSprite->Draw();
+	//obstacleSprite->Draw();
+	//forestSprite->Draw();
+	//
+	//charSprite->Draw();
+	exitSprite->Draw();
+	playSprite->Draw();
 }
 
 
