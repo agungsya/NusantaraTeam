@@ -122,6 +122,11 @@ void ZumaJump::Init()
 
 	playButtonIsSelected = true;
 	exitButtonIsSelected = false;
+
+	scoreText = new Text("lucon.ttf", 14, defaultTextShader);
+	scoreText->SetScale(1.0f);
+	scoreText->SetColor(255, 255, 255);
+	scoreText->SetPosition(875, 575);
 }
 
 void ZumaJump::Update()
@@ -274,7 +279,10 @@ void ZumaJump::Update()
 				playerPos.y);
 		}
 	}
-	
+
+	//score
+	scoreText->SetText("Score: " + to_string(score++));
+
 	// Update sprite animation
 	charSprite->Update(GetGameTime());
 	forestSprite->Update(GetGameTime());
@@ -294,6 +302,7 @@ void ZumaJump::Render()
 		coinSprite->Draw();
 		forestSprite->Draw();
 		charSprite->Draw();
+		scoreText->Draw();
 		if (inputManager->IsKeyReleased("Quit")) {
 			inGame = false;
 			return;

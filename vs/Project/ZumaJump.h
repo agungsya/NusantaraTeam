@@ -44,7 +44,8 @@ namespace Engine {
 		Texture* coinTexture = NULL;
 		Sprite* coinSprite = NULL;
 
-		Music* music = NULL;;
+		Music* music = NULL;
+		Text* scoreText = NULL;
 
 		bool coinCollidedLeft = false;
 		bool collidedLeft = false;
@@ -54,6 +55,7 @@ namespace Engine {
 		bool exitButtonIsSelected = false;
 
 		float counter = 0;
+		float score = 0;
 	};
 }
 #endif
