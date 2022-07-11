@@ -107,6 +107,9 @@ void ZumaJump::Init()
 	//set bounding box
 	charSprite->SetBoundingBoxSize(charSprite->GetScaleWidth() - (16 * charSprite->GetScale()),
 		charSprite->GetScaleHeight() - (4 * charSprite->GetScale()));
+	
+	obstacleSprite->SetBoundingBoxSize(obstacleSprite->GetScaleWidth() - (16 * obstacleSprite->GetScale()),
+		obstacleSprite->GetScaleHeight() - (4 * obstacleSprite->GetScale()));
 
 	//add input mapping 
 	inputManager->AddInputMapping("Jump", SDLK_w);
@@ -293,11 +296,10 @@ void ZumaJump::Update()
 	exitSprite->Update(GetGameTime());
 	logoSprite->Update(GetGameTime());
 
-	for (int i = 0; i < 7; i++) {
-		if (obstacleSprite->GetBoundingBox()->CollideWith(charSprite->GetBoundingBox())) {
-			inGame = false;
-		}
+	if (obstacleSprite->GetBoundingBox()->CollideWith(charSprite->GetBoundingBox())) {
+		inGame = false;
 	}
+	
 }
 
 void ZumaJump::Render()
