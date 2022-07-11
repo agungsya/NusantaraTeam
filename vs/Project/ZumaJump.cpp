@@ -69,6 +69,17 @@ void ZumaJump::Init()
 	obstacleSprite->PlayAnim("obstacle-move");
 	obstacleSprite->SetAnimationDuration(500);
 
+	//set coin
+	coinTexture = new Texture("coin.png");
+	coinSprite = new Sprite(coinTexture, defaultSpriteShader, defaultQuad);
+	coinSprite->SetPosition(950, 120);
+	//coinSprite->SetPosition((obstacleSprite->GetPosition().x + 30), 120);
+	coinSprite->SetScale(0.2);
+	coinSprite->SetNumXFrames(1);
+	coinSprite->SetNumYFrames(1);
+	coinSprite->AddAnimation("coin", 0, 0);
+	coinSprite->PlayAnim("coin");
+
 	//set tree
 	treeTexture = new Texture("tree.png");
 	treeSprite = new Sprite(treeTexture, defaultSpriteShader, defaultQuad);
@@ -121,6 +132,9 @@ void ZumaJump::Update()
 	float obstacleSpritex = obstacleSprite->GetPosition().x;
 	float obstacleSpritey = obstacleSprite->GetPosition().y;
 
+	float coinSpritex = coinSprite->GetPosition().x;
+	float coinSpritey = coinSprite->GetPosition().y;
+
 	float charSpritex = charSprite->GetPosition().x;
 	float charSpritey = charSprite->GetPosition().y;
 
@@ -131,10 +145,12 @@ void ZumaJump::Update()
 	float static groundPos = playerPos.y;
 
 	//set state button
-	if (inputManager->IsKeyReleased("Quit")) {
+	/*if (inputManager->IsKeyReleased("Quit")) {
 		state = State::EXIT;
 		return;
-	}
+	}*/
+
+
 	charSprite->PlayAnim("run");
 	obstacleSprite->PlayAnim("obstacle-move");
 	if (inputManager->IsKeyReleased("Jump")) {
@@ -192,6 +208,26 @@ void ZumaJump::Update()
 		obstacleSprite->PlayAnim("obstacle-move");
 		collidedLeft = false;
 	}
+
+	//set state coin
+	if (coinCollidedLeft == false) {
+		float velocity = -0.5f;
+
+		coinSpritex += velocity * GetGameTime();
+
+		coinSprite->SetPosition(coinSpritex, coinSpritey);
+
+		if (coinSpritex <= -200) {
+			coinCollidedLeft = true;
+		}
+	}
+	else {
+
+		coinSprite->SetPosition(950, 120);
+		//coinSprite->SetPosition((obstacleSprite->GetPosition().x - 40), 120);
+		coinSprite->PlayAnim("coin");
+		coinCollidedLeft = false;
+	}
 	
 	//set state tree
 	if (treeCollidedLeft == false) {
@@ -243,6 +279,7 @@ void ZumaJump::Update()
 	charSprite->Update(GetGameTime());
 	forestSprite->Update(GetGameTime());
 	obstacleSprite->Update(GetGameTime());
+	coinSprite->Update(GetGameTime());
 	treeSprite->Update(GetGameTime());
 	playSprite->Update(GetGameTime());
 	exitSprite->Update(GetGameTime());
@@ -254,8 +291,13 @@ void ZumaJump::Render()
 	if (inGame) {
 		treeSprite->Draw();
 		obstacleSprite->Draw();
+		coinSprite->Draw();
 		forestSprite->Draw();
 		charSprite->Draw();
+		if (inputManager->IsKeyReleased("Quit")) {
+			inGame = false;
+			return;
+		}
 	}
 	else {
 		logoSprite->Draw();

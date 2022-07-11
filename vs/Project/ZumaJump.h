@@ -41,8 +41,12 @@ namespace Engine {
 		Sprite* playSprite = NULL;
 		Sprite* exitSprite = NULL;
 
+		Texture* coinTexture = NULL;
+		Sprite* coinSprite = NULL;
+
 		Music* music = NULL;;
 
+		bool coinCollidedLeft = false;
 		bool collidedLeft = false;
 		bool treeCollidedLeft = false;
 		bool inGame = false;
