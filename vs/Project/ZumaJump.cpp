@@ -126,7 +126,8 @@ void ZumaJump::Init()
 	scoreText = new Text("lucon.ttf", 14, defaultTextShader);
 	scoreText->SetScale(1.0f);
 	scoreText->SetColor(255, 255, 255);
-	scoreText->SetPosition(875, 575);
+	scoreText->SetPosition((setting->screenWidth - 100), 575);
+	//scoreText->SetPosition(875, 575);
 }
 
 void ZumaJump::Update()
@@ -154,7 +155,6 @@ void ZumaJump::Update()
 		state = State::EXIT;
 		return;
 	}*/
-
 
 	charSprite->PlayAnim("run");
 	obstacleSprite->PlayAnim("obstacle-move");
@@ -292,6 +292,12 @@ void ZumaJump::Update()
 	playSprite->Update(GetGameTime());
 	exitSprite->Update(GetGameTime());
 	logoSprite->Update(GetGameTime());
+
+	for (int i = 0; i < 7; i++) {
+		if (obstacleSprite->GetBoundingBox()->CollideWith(charSprite->GetBoundingBox())) {
+			inGame = false;
+		}
+	}
 }
 
 void ZumaJump::Render()
