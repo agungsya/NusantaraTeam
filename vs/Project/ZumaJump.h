@@ -44,8 +44,12 @@ namespace Engine {
 		Texture* coinTexture = NULL;
 		Sprite* coinSprite = NULL;
 
+		Texture* backgroundTexture = NULL;
+		Sprite* backgroundSprite = NULL;
+
 		Music* music = NULL;
 		Text* scoreText = NULL;
+		Text* lastScoreText = NULL;
 
 		bool coinCollidedLeft = false;
 		bool collidedLeft = false;
