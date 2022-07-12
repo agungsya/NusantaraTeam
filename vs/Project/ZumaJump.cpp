@@ -58,10 +58,10 @@ void ZumaJump::Init()
 	forestSprite->SetNumXFrames(1);
 	forestSprite->SetNumYFrames(1);
 
-	backgroundTexture = new Texture("forest_hill.png");
+	backgroundTexture = new Texture("background.png");
 	backgroundSprite = new Sprite(backgroundTexture, defaultSpriteShader, defaultQuad);
 	backgroundSprite->SetPosition(0, 0);
-	backgroundSprite->SetScale(0.7);
+	backgroundSprite->SetScale(2.0f);
 	backgroundSprite->SetNumXFrames(1);
 	backgroundSprite->SetNumYFrames(1);
 
@@ -139,14 +139,14 @@ void ZumaJump::Init()
 
 	scoreText = new Text("lucon.ttf", 14, defaultTextShader);
 	scoreText->SetScale(1.0f);
-	scoreText->SetColor(255, 255, 255);
+	scoreText->SetColor(0, 0, 0);
 	scoreText->SetPosition((setting->screenWidth - 100), 575);
 	//scoreText->SetPosition(875, 575);
 
 	lastScoreText = new Text("lucon.ttf", 14, defaultTextShader);
 	lastScoreText->SetScale(1.0f);
 	lastScoreText->SetColor(255, 255, 255);
-	lastScoreText->SetPosition(((setting->screenWidth / 2)), 100);
+	lastScoreText->SetPosition(((setting->screenWidth / 2) - 50), 100);
 }
 
 void ZumaJump::Update()
@@ -214,7 +214,6 @@ void ZumaJump::Update()
 		else {
 
 			coinSprite->SetPosition(950, 120);
-			//coinSprite->SetPosition((obstacleSprite->GetPosition().x - 40), 120);
 			coinSprite->PlayAnim("coin");
 			coinCollidedLeft = false;
 		}
@@ -232,7 +231,6 @@ void ZumaJump::Update()
 			}
 		}
 		else {
-
 			treeSprite->SetPosition(1030, 90);
 			treeSprite->PlayAnim("tree-move");
 			treeCollidedLeft = false;
@@ -274,8 +272,6 @@ void ZumaJump::Update()
 		}
 	}
 	
-	
-
 	//set state button main menu
 	if (inputManager->IsKeyReleased("Menu Move Up")) {
 		playSprite->PlayAnim("play-hover");
@@ -285,9 +281,8 @@ void ZumaJump::Update()
 	}
 	if (inputManager->IsKeyReleased("enter")) {
 		if (playButtonIsSelected && exitButtonIsSelected == false) {
-			inGame = true;
 			score = 0;
-			return;
+			inGame = true;
 		}
 		else {
 			inGame = false;
@@ -295,21 +290,20 @@ void ZumaJump::Update()
 			return;
 		}
 	}
-	else {
-		if (inputManager->IsKeyReleased("Menu Move Down")) {
-			exitSprite->PlayAnim("exit-hover");
-			playSprite->PlayAnim("play-normal");
-			exitButtonIsSelected = true;
-			playButtonIsSelected = false;
-			if (inputManager->IsKeyReleased("enter")) {
-				state = State::EXIT;
-				return;
-			}
+	
+	if (inputManager->IsKeyReleased("Menu Move Down")) {
+		exitSprite->PlayAnim("exit-hover");
+		playSprite->PlayAnim("play-normal");
+		exitButtonIsSelected = true;
+		playButtonIsSelected = false;
+		if (inputManager->IsKeyReleased("enter")) {
+			state = State::EXIT;
+			return;
 		}
-		//score
-		scoreText->SetText("Score: " + to_string(score / 1000));
-		lastScoreText->SetText("Last Score: " + to_string(score / 1000));
 	}
+	//score
+	scoreText->SetText("Score: " + to_string(score / 1000));
+	lastScoreText->SetText("Last Score: " + to_string(score / 1000));
 
 	
 	// Update sprite animation
