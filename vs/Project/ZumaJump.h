@@ -19,6 +19,8 @@ namespace Engine {
 		virtual void Init();
 		virtual void Update();
 		virtual void Render();
+		void RenderMenu();
+		void RenderGame();
 	private:
 		Texture* charTexture = NULL;
 		Sprite* charSprite = NULL;

@@ -152,160 +152,12 @@ void ZumaJump::Init()
 void ZumaJump::Update()
 {	
 	if (inGame) {
-		vec2 playerPos = charSprite->GetPosition();
-
-		float obstacleSpritex = obstacleSprite->GetPosition().x;
-		float obstacleSpritey = obstacleSprite->GetPosition().y;
-
-		float coinSpritex = coinSprite->GetPosition().x;
-		float coinSpritey = coinSprite->GetPosition().y;
-
-		float charSpritex = charSprite->GetPosition().x;
-		float charSpritey = charSprite->GetPosition().y;
-
-		float treeSpritex = treeSprite->GetPosition().x;
-		float treeSpritey = treeSprite->GetPosition().y;
-
-		// Set ground position
-		float static groundPos = playerPos.y;
-
-		charSprite->PlayAnim("run");
-		obstacleSprite->PlayAnim("obstacle-move");
-
-		if (inputManager->IsKeyReleased("Jump")) {
-			yspeed = 200.0f;
-			bool flip = charSprite->GetFlipHorizontal();
-
-			charSprite->SetPosition(playerPos.x,
-				playerPos.y + yspeed + gravity * GetGameTime());
-		}
-
-		//set state obstacle
-		if (collidedLeft == false) {
-			float velocity = -0.5f;
-
-			obstacleSpritex += velocity * GetGameTime();
-
-			obstacleSprite->SetPosition(obstacleSpritex, obstacleSpritey);
-
-			if (obstacleSpritex <= -200) {
-				collidedLeft = true;
-			}
-		}
-		else {
-
-			obstacleSprite->SetPosition(1030, 50);
-			obstacleSprite->PlayAnim("obstacle-move");
-			collidedLeft = false;
-		}
-
-		//set state coin
-		if (coinCollidedLeft == false) {
-			float velocity = -0.5f;
-
-			coinSpritex += velocity * GetGameTime();
-
-			coinSprite->SetPosition(coinSpritex, coinSpritey);
-
-			if (coinSpritex <= -200) {
-				coinCollidedLeft = true;
-			}
-		}
-		else {
-
-			coinSprite->SetPosition(950, 120);
-			coinSprite->PlayAnim("coin");
-			coinCollidedLeft = false;
-		}
-
-		//set state tree
-		if (treeCollidedLeft == false) {
-			float velocity = -0.2f;
-
-			treeSpritex += velocity * GetGameTime();
-
-			treeSprite->SetPosition(treeSpritex, treeSpritey);
-
-			if (treeSpritex <= -400) {
-				treeCollidedLeft = true;
-			}
-		}
-		else {
-			treeSprite->SetPosition(1030, 90);
-			treeSprite->PlayAnim("tree-move");
-			treeCollidedLeft = false;
-		}
-
-		// Move player to right side after moving out the left screen
-		if (playerPos.x < 0) {
-			charSprite->SetPosition(setting->screenWidth - charSprite->GetScaleWidth(),
-				playerPos.y);
-		}
-
-		// Move player to left side  after moving out the right screen
-		if (playerPos.x > setting->screenWidth - charSprite->GetScaleWidth()) {
-			charSprite->SetPosition(0,
-				playerPos.y);
-		}
-
-		// Set frog back to ground after jumping
-		if (playerPos.y > groundPos) {
-			if (counter >= 200) {
-				playerPos.y = groundPos;
-				charSprite->SetPosition(playerPos.x,
-					playerPos.y);
-				counter = 0;
-			}
-			else {
-				counter++;
-				charSprite->SetPosition(playerPos.x,
-					playerPos.y);
-			}
-		}
-		score++;
-		if (obstacleSprite->GetBoundingBox()->CollideWith(charSprite->GetBoundingBox())) {
-			inGame = false;
-		}
-		else if (coinSprite->GetBoundingBox()->CollideWith(charSprite->GetBoundingBox())) {
-			score += 5000;
-			coinSprite->SetPosition(950, 120);
-		}
+		RenderGame();
 	}
-	
-	//set state button main menu
-	if (inputManager->IsKeyReleased("Menu Move Up")) {
-		playSprite->PlayAnim("play-hover");
-		exitSprite->PlayAnim("exit-normal");
-		playButtonIsSelected = true;
-		exitButtonIsSelected = false;
+	else {
+		RenderMenu();
 	}
-	if (inputManager->IsKeyReleased("enter")) {
-		if (playButtonIsSelected && exitButtonIsSelected == false) {
-			score = 0;
-			inGame = true;
-		}
-		else {
-			inGame = false;
-			state = State::EXIT;
-			return;
-		}
-	}
-	
-	if (inputManager->IsKeyReleased("Menu Move Down")) {
-		exitSprite->PlayAnim("exit-hover");
-		playSprite->PlayAnim("play-normal");
-		exitButtonIsSelected = true;
-		playButtonIsSelected = false;
-		if (inputManager->IsKeyReleased("enter")) {
-			state = State::EXIT;
-			return;
-		}
-	}
-	//score
-	scoreText->SetText("Score: " + to_string(score / 1000));
-	lastScoreText->SetText("Last Score: " + to_string(score / 1000));
 
-	
 	// Update sprite animation
 	charSprite->Update(GetGameTime());
 	forestSprite->Update(GetGameTime());
@@ -328,10 +180,6 @@ void ZumaJump::Render()
 		forestSprite->Draw();
 		charSprite->Draw();
 		scoreText->Draw();
-		if (inputManager->IsKeyReleased("Quit")) {
-			inGame = false;
-			return;
-		}
 	}
 	else {
 		logoSprite->Draw();
@@ -341,6 +189,168 @@ void ZumaJump::Render()
 	}	
 }
 
+void ZumaJump::RenderMenu()
+{
+	if (inputManager->IsKeyReleased("Menu Move Up")) {
+		playSprite->PlayAnim("play-hover");
+		exitSprite->PlayAnim("exit-normal");
+		playButtonIsSelected = true;
+		exitButtonIsSelected = false;
+	}
+	if (inputManager->IsKeyReleased("enter")) {
+		if (playButtonIsSelected && exitButtonIsSelected == false) {
+			score = 0;
+			inGame = true;
+		}
+		else {
+			inGame = false;
+			state = State::EXIT;
+			return;
+		}
+	}
+
+	if (inputManager->IsKeyReleased("Menu Move Down")) {
+		exitSprite->PlayAnim("exit-hover");
+		playSprite->PlayAnim("play-normal");
+		exitButtonIsSelected = true;
+		playButtonIsSelected = false;
+		if (inputManager->IsKeyReleased("enter")) {
+			state = State::EXIT;
+			return;
+		}
+	}
+	//score
+
+	lastScoreText->SetText("Last Score: " + to_string(score / 1000));
+}
+
+void ZumaJump::RenderGame() 
+{
+	vec2 playerPos = charSprite->GetPosition();
+
+	float obstacleSpritex = obstacleSprite->GetPosition().x;
+	float obstacleSpritey = obstacleSprite->GetPosition().y;
+
+	float coinSpritex = coinSprite->GetPosition().x;
+	float coinSpritey = coinSprite->GetPosition().y;
+
+	float charSpritex = charSprite->GetPosition().x;
+	float charSpritey = charSprite->GetPosition().y;
+
+	float treeSpritex = treeSprite->GetPosition().x;
+	float treeSpritey = treeSprite->GetPosition().y;
+
+	// Set ground position
+	float static groundPos = playerPos.y;
+
+	charSprite->PlayAnim("run");
+	obstacleSprite->PlayAnim("obstacle-move");
+
+	if (inputManager->IsKeyReleased("Jump")) {
+		yspeed = 200.0f;
+		bool flip = charSprite->GetFlipHorizontal();
+
+		charSprite->SetPosition(playerPos.x,
+			playerPos.y + yspeed + gravity * GetGameTime());
+	}
+
+	//set state obstacle
+	if (collidedLeft == false) {
+		float velocity = -0.5f;
+
+		obstacleSpritex += velocity * GetGameTime();
+
+		obstacleSprite->SetPosition(obstacleSpritex, obstacleSpritey);
+
+		if (obstacleSpritex <= -200) {
+			collidedLeft = true;
+		}
+	}
+	else {
+
+		obstacleSprite->SetPosition(1030, 50);
+		obstacleSprite->PlayAnim("obstacle-move");
+		collidedLeft = false;
+	}
+
+	//set state coin
+	if (coinCollidedLeft == false) {
+		float velocity = -0.5f;
+
+		coinSpritex += velocity * GetGameTime();
+
+		coinSprite->SetPosition(coinSpritex, coinSpritey);
+
+		if (coinSpritex <= -200) {
+			coinCollidedLeft = true;
+		}
+	}
+	else {
+
+		coinSprite->SetPosition(950, 120);
+		coinSprite->PlayAnim("coin");
+		coinCollidedLeft = false;
+	}
+
+	//set state tree
+	if (treeCollidedLeft == false) {
+		float velocity = -0.2f;
+
+		treeSpritex += velocity * GetGameTime();
+
+		treeSprite->SetPosition(treeSpritex, treeSpritey);
+
+		if (treeSpritex <= -400) {
+			treeCollidedLeft = true;
+		}
+	}
+	else {
+		treeSprite->SetPosition(1030, 90);
+		treeSprite->PlayAnim("tree-move");
+		treeCollidedLeft = false;
+	}
+
+	// Move player to right side after moving out the left screen
+	if (playerPos.x < 0) {
+		charSprite->SetPosition(setting->screenWidth - charSprite->GetScaleWidth(),
+			playerPos.y);
+	}
+
+	// Move player to left side  after moving out the right screen
+	if (playerPos.x > setting->screenWidth - charSprite->GetScaleWidth()) {
+		charSprite->SetPosition(0,
+			playerPos.y);
+	}
+
+	// Set frog back to ground after jumping
+	if (playerPos.y > groundPos) {
+		if (counter >= 200) {
+			playerPos.y = groundPos;
+			charSprite->SetPosition(playerPos.x,
+				playerPos.y);
+			counter = 0;
+		}
+		else {
+			counter++;
+			charSprite->SetPosition(playerPos.x,
+				playerPos.y);
+		}
+	}
+	score++;
+	if (obstacleSprite->GetBoundingBox()->CollideWith(charSprite->GetBoundingBox())) {
+		obstacleSprite->SetPosition(950, 50);
+		inGame = false;
+	}
+	else if (coinSprite->GetBoundingBox()->CollideWith(charSprite->GetBoundingBox())) {
+		score += 5000;
+		coinSprite->SetPosition(950, 120);
+	}
+	scoreText->SetText("Score: " + to_string(score / 1000));
+	if (inputManager->IsKeyReleased("Quit")) {
+		inGame = false;
+		return;
+	}
+}
 int main(int argc, char** argv) {
 	Setting* setting = new Setting();
 	setting->windowTitle = "Project Example";
