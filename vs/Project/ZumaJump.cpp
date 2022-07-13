@@ -324,7 +324,7 @@ void ZumaJump::RenderGame()
 
 	// Set frog back to ground after jumping
 	if (playerPos.y > groundPos) {
-		if (counter >= 200) {
+		if (counter >= 20) {
 			playerPos.y = groundPos;
 			charSprite->SetPosition(playerPos.x,
 				playerPos.y);
@@ -356,6 +356,7 @@ int main(int argc, char** argv) {
 	setting->windowTitle = "Project Example";
 	setting->screenWidth = 1024;
 	setting->screenHeight = 600;
+	setting->targetFrameRate = 60;
 	setting->windowFlag = WindowFlag::WINDOWED;
 	Game* game = new ZumaJump(setting);
 	game->Run();
