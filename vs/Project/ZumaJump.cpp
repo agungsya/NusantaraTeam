@@ -51,7 +51,7 @@ void ZumaJump::Init()
 	exitSprite->SetAnimationDuration(500);
 
 	//set forest ground
-	forestTexture = new Texture("forest_ground.png");
+	forestTexture = new Texture("forest_background.png");
 	forestSprite = new Sprite(forestTexture, defaultSpriteShader, defaultQuad);
 	forestSprite->SetPosition(0, 0);
 	forestSprite->SetScale(0.7);
@@ -153,6 +153,26 @@ void ZumaJump::Update()
 {	
 	if (inGame) {
 		RenderGame();
+		//if (backgroundCounter >= 15000) {
+		//	UpdateObject(GetGameTime(), setting, true);
+		//	backgroundCounter = 0.0f;
+		//}
+		//else {
+		//	UpdateObject(GetGameTime(), setting, false);
+		//}
+		//backgroundCounter += GetGameTime();
+
+
+		//Background 
+		float xbackground = forestSprite->GetPosition().x;
+		float ybackground = forestSprite->GetPosition().y;
+		float velocity = 0.2f;
+		float newX = xbackground - velocity * GetGameTime() * 0.35f;
+		if (newX <= -5000)
+			forestSprite->SetPosition(0, ybackground);
+		else
+			forestSprite->SetPosition(newX, ybackground);
+		//cout << "xbbbb :" << xb - backgroundCounter * GetGameTime() << endl;
 	}
 	else {
 		RenderMenu();
@@ -173,11 +193,13 @@ void ZumaJump::Update()
 void ZumaJump::Render()
 {
 	if (inGame) {
-		backgroundSprite->Draw();
-		treeSprite->Draw();
+		forestSprite->Draw();
+
+		//backgroundSprite->Draw();
+		//treeSprite->Draw();
 		obstacleSprite->Draw();
 		coinSprite->Draw();
-		forestSprite->Draw();
+		//forestSprite->Draw();
 		charSprite->Draw();
 		scoreText->Draw();
 	}
@@ -324,7 +346,7 @@ void ZumaJump::RenderGame()
 
 	// Set frog back to ground after jumping
 	if (playerPos.y > groundPos) {
-		if (counter >= 20) {
+		if (counter >= 10) {
 			playerPos.y = groundPos;
 			charSprite->SetPosition(playerPos.x,
 				playerPos.y);
@@ -351,12 +373,32 @@ void ZumaJump::RenderGame()
 		return;
 	}
 }
+
+//void ZumaJump::UpdateObject(float gameTime, Setting* setting, bool isReset)
+//{
+//
+//	float xBg = forestSprite->GetPosition().x;
+//	float yBg = forestSprite->GetPosition().y;
+//	float speedBg = 0.05f;
+//
+//	if (isReset) {
+//		forestSprite->SetPosition(0, 0);
+//	}
+//	else {
+//		xBg -= speedBg * gameTime;
+//		forestSprite->SetPosition(xBg, yBg);
+//	}
+//
+//
+//}
+
+
 int main(int argc, char** argv) {
 	Setting* setting = new Setting();
 	setting->windowTitle = "Project Example";
 	setting->screenWidth = 1024;
 	setting->screenHeight = 600;
-	setting->targetFrameRate = 60;
+	setting->targetFrameRate = 30;
 	setting->windowFlag = WindowFlag::WINDOWED;
 	Game* game = new ZumaJump(setting);
 	game->Run();

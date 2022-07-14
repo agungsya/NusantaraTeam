@@ -62,6 +62,9 @@ namespace Engine {
 
 		float counter = 0;
 		int score = 0;
+		float backgroundCounter = 0.0f;
+		void UpdateObject(
+			float gameTime, Setting* setting, bool isReset);
 	};
 }
 #endif
