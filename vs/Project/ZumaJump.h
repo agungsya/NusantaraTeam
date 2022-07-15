@@ -33,21 +33,17 @@ namespace Engine {
 		Texture* obstacleTexture = NULL;
 		Sprite* obstacleSprite = NULL;
 
-		Texture* treeTexture = NULL;
-		Sprite* treeSprite = NULL;
-
 		Texture* logoTexture = NULL;
 		Sprite* logoSprite = NULL;
 
 		Texture* buttonTexture = NULL;
 		Sprite* playSprite = NULL;
 		Sprite* exitSprite = NULL;
-
 		Texture* coinTexture = NULL;
 		Sprite* coinSprite = NULL;
 
-		Texture* backgroundTexture = NULL;
-		Sprite* backgroundSprite = NULL;
+		Texture* backgroundMainMenuTexture = NULL;
+		Sprite* backgroundMainMenuSprite = NULL;
 
 		Music* music = NULL;
 		Text* scoreText = NULL;
@@ -55,7 +51,6 @@ namespace Engine {
 
 		bool coinCollidedLeft = false;
 		bool collidedLeft = false;
-		bool treeCollidedLeft = false;
 		bool inGame = false;
 		bool playButtonIsSelected = false;
 		bool exitButtonIsSelected = false;
@@ -63,8 +58,6 @@ namespace Engine {
 		float counter = 0;
 		int score = 0;
 		float backgroundCounter = 0.0f;
-		void UpdateObject(
-			float gameTime, Setting* setting, bool isReset);
 	};
 }
 #endif
